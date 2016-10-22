@@ -5,6 +5,7 @@
  */
 package ca1.business;
 
+import ca1.model.Appointment;
 import ca1.model.People;
 import java.util.*;
 import javax.ejb.Stateless;
@@ -18,18 +19,16 @@ public class PeopleBean {
     @PersistenceContext
     private EntityManager em;
 
-    public Optional<People> find(final String pid) {
-        return (Optional.ofNullable(em.find(People.class, pid)));
+    public Optional<People> find(final String email) {
+        TypedQuery<People> query = em.createNamedQuery(
+                "People.findPeople", People.class);
+
+        return (Optional.ofNullable(query.getSingleResult()));
+
     }
 
     public void save(People people) {
         em.persist(people);
-    }
-
-    public List<People> findAll() {
-        TypedQuery<People> query = em.createNamedQuery(
-                "People.findAll", People.class);
-        return (query.getResultList());
     }
 
 }
