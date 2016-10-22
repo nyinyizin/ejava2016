@@ -34,9 +34,9 @@ public class People implements Serializable{
     @Id
     @Basic(optional = false)
     @NotNull
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="people_seq")
+    //@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="people_seq")
     @Column(name = "pid")
-    private Integer peopleId;
+    private String peopleId;
     @Column(name = "name")
     @Basic(optional = false)
     private String name;
@@ -49,14 +49,14 @@ public class People implements Serializable{
     /**
      * @return the peopleId
      */
-    public Integer getPeopleId() {
+    public String getPeopleId() {
         return peopleId;
     }
 
     /**
      * @param peopleId the peopleId to set
      */
-    public void setPeopleId(Integer peopleId) {
+    public void setPeopleId(String peopleId) {
         this.peopleId = peopleId;
     }
 
