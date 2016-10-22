@@ -10,19 +10,31 @@ import java.util.ArrayList;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 
 @Entity
 @Table(name = "people")
 public class People implements Serializable{
     
     private static final long serialVersionUID = 1L;
+    
+    @SequenceGenerator(
+        name="people_seq"
+        , sequenceName="app_seq"
+        , allocationSize=5
+        )
     @Id
     @Basic(optional = false)
     @NotNull
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="people_seq")
     @Column(name = "pid")
     private Integer peopleId;
     @Column(name = "name")
