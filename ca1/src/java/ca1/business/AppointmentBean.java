@@ -5,10 +5,9 @@
  */
 package ca1.business;
 
-/**
- *
- * @author nyinyizin
- */
+import javax.ejb.Stateless;
+
+@Stateless
 public class AppointmentBean {
-    
+
 }
