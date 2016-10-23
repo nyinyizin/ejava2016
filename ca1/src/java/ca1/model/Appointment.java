@@ -17,8 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-//@NamedQuery(name="Appointment.findAllAppointments",
-  //      query="Select a.appt_id, a.appt_date,a.description,a.pid from People p join Appointment a where p.email =:email ")
+@NamedQuery(name="Appointment.findAllAppointments",
+       query="Select a from Appointment a join a.people as p where p.email=:email")
 @Entity
 @Table(name="appointment")
 public class Appointment implements Serializable{

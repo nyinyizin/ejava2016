@@ -24,9 +24,10 @@ public class AppointmentBean {
     }
 
     public List<Appointment> findAllAppointment(String email) {
-        //TypedQuery<Appointment> query = em.createNamedQuery(
-          //      "Appointment.findAllAppointments", Appointment.class);
-        return null; //(query.getResultList());
+        TypedQuery<Appointment> query = em.createNamedQuery(
+                "Appointment.findAllAppointments", Appointment.class);
+        query.setParameter("email", email);
+        return (query.getResultList());
     }
 
 }
