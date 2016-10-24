@@ -18,6 +18,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -34,20 +36,35 @@ public class AppointmentResource {
     
     @GET
     @Path("/{email}")
-    public Response getAppointment(@PathParam("email") String email){
+    public void getAppointment(@PathParam("email") String email,@Suspended final AsyncResponse async){
+      
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Response resp;
+                List<Appointment> appointments=appointmentBean.findAllAppointment(email);
+                if(!appointments.isEmpty()){
+                        JsonArrayBuilder appJsonArrayBuilder=Json.createArrayBuilder();
+                        appointments.stream().forEach((app) -> {
+                            appJsonArrayBuilder.add(Json.createObjectBuilder()
+                                .add("appointmentId",app.getAppointmentId())
+                                .add("dateTime", app.getApptDate().getTime())
+                                .add("description", app.getDescription())
+                                .add("personId", app.getPeople().getPeopleId())
+                                .build()
+                        );
+                    });
+                    resp=Response.status(Response.Status.OK).entity(appJsonArrayBuilder.build()).build();
+                }else{
+                    resp=Response.status(Response.Status.NO_CONTENT).build();
+                }
+            
+                async.resume(resp);
+            }
+        }).start();
         
-        List<Appointment> appointments=appointmentBean.findAllAppointment(email);
-        JsonArrayBuilder appJsonArrayBuilder=Json.createArrayBuilder();
-        for(Appointment app:appointments){
-            appJsonArrayBuilder.add(Json.createObjectBuilder()
-                    .add("appointmentId",app.getAppointmentId())
-                    .add("dateTime", app.getApptDate().getTime())
-                    .add("description", app.getDescription())
-                    .add("personId", app.getPeople().getPeopleId())
-                    .build()
-            );
-        }
-        return (Response.status(Response.Status.CREATED).entity(appJsonArrayBuilder.build()).build());
+       
+       
     }
     
 }
