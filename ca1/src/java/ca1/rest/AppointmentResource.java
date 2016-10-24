@@ -56,7 +56,7 @@ public class AppointmentResource {
                     });
                     resp=Response.status(Response.Status.OK).entity(appJsonArrayBuilder.build()).build();
                 }else{
-                    resp=Response.status(Response.Status.NO_CONTENT).build();
+                    resp=Response.status(Response.Status.NOT_FOUND).build();
                 }
             
                 async.resume(resp);
