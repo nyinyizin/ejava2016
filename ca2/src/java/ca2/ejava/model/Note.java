@@ -7,8 +7,6 @@ package ca2.ejava.model;
 
 import java.io.Serializable;
 import java.sql.Date;
-import javax.faces.bean.RequestScoped;
-import javax.inject.Named;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +14,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -23,9 +23,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author nyinyizin
  */
-@RequestScoped
 @Table(name="note")
-@Named("note")
 @Entity
 public class Note implements Serializable{
         private static long serialVersionUID = 1L;
@@ -51,6 +49,12 @@ public class Note implements Serializable{
         @NotNull
         @Column(name="postdate")
         private Date postDate;
+        
+        @NotNull
+        @ManyToOne
+        @JoinColumn( name = "userid", referencedColumnName = "userid")
+        private User user;
+        
 
     /**
      * @return the noteId
@@ -120,6 +124,20 @@ public class Note implements Serializable{
      */
     public void setPostDate(Date postDate) {
         this.postDate = postDate;
+    }
+
+    /**
+     * @return the user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
         
 }
