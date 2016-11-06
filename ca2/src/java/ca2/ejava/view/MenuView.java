@@ -6,14 +6,18 @@
 package ca2.ejava.view;
 
 import ca2.ejava.business.MenuBean;
+import ca2.ejava.business.UserBean;
 import ca2.ejava.model.Category;
 import ca2.ejava.model.Note;
+import ca2.ejava.model.User;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 /**
@@ -25,12 +29,14 @@ import javax.inject.Named;
 public class MenuView {
     
     @EJB private MenuBean menuBean;
+    @EJB private UserBean userBean;
     
     private String userId="xykek";
     private String title;
     private String content;
     private Category category;
     private Note note;
+    private User user;
     private List<Note> notelist = new LinkedList<>();
     
     public Category[] getCategories(){
@@ -38,14 +44,23 @@ public class MenuView {
     }
     
     public String createNote(){
+        Optional<User> user = userBean.find(userId);
+        if(!user.isPresent()){
+            FacesContext context = FacesContext.getCurrentInstance();
+            FacesMessage error = new FacesMessage("Invalid User");
+            context.addMessage("menuForm=errorCreate", error);
+            return null;
+        }
         note = new Note();
+        note.setUser(user.get());
         note.setCategory(category);
         note.setContent(content);
         note.setTitle(title);
         Date date = new java.sql.Date(System.currentTimeMillis());
         note.setPostDate(date);
-        
-        return(null);
+        menuBean.save(note);
+        menuBean.getAllNoteByUser(userId);
+        return("Note successfully created");
     }
     
     public void findAllNotes(){

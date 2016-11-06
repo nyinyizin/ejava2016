@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+@Stateless
 public class UserBean {
 
     @PersistenceContext
@@ -27,5 +28,9 @@ public class UserBean {
                 "Note.findUserNotes", Note.class);
         query.setParameter("us", email);
         return (query.getResultList());
+    }
+    
+    public Optional<User> find(String userId) {
+        return (Optional.ofNullable(em.find(User.class, userId)));
     }
 }
