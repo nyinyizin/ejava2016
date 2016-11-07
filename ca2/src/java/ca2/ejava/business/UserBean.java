@@ -11,7 +11,6 @@ import java.util.*;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 @Stateless
 public class UserBean {
@@ -21,13 +20,6 @@ public class UserBean {
 
     public void save(User user) {
         em.persist(user);
-    }
-
-    public List<Note> findUserNote(String email) {
-        TypedQuery<Note> query = em.createNamedQuery(
-                "Note.findUserNotes", Note.class);
-        query.setParameter("us", email);
-        return (query.getResultList());
     }
     
     public Optional<User> find(String userId) {

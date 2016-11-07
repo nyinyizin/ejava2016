@@ -8,21 +8,18 @@ package ca2.ejava.view;
 
 import ca2.ejava.business.UserBean;
 import ca2.ejava.model.User;
-import java.io.Serializable;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 
     
     
-@ViewScoped
-@Named
-public class RegisterView implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@RequestScoped
+@Named("registerView")
+public class RegisterView {
 
     @EJB private UserBean userBean;
     
