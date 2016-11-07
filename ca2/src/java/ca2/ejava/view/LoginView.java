@@ -5,20 +5,17 @@
  */
 package ca2.ejava.view;
 
-import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-@ViewScoped
-@Named
-public class LoginView implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+@RequestScoped
+@Named("loginView")
+public class LoginView {
+    
     private String username;
     private String password;
 
