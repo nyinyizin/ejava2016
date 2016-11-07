@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -36,8 +37,12 @@ public class MenuView {
     private String content;
     private Category category;
     private Note note;
-    private User user;
     private List<Note> notelist = new LinkedList<>();
+    
+    @PostConstruct
+    public void init(){
+        this.findAllNotes();
+    }
     
     public Category[] getCategories(){
         return Category.values();
@@ -59,8 +64,12 @@ public class MenuView {
         Date date = new java.sql.Date(System.currentTimeMillis());
         note.setPostDate(date);
         menuBean.save(note);
-        menuBean.getAllNoteByUser(userId);
-        return("Note successfully created");
+        notelist = menuBean.getAllNoteByUser(userId);
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage successful = new FacesMessage("note created successfully!");
+        context.addMessage("menuForm=errorCreate", successful);
+        return null;
     }
     
     public void findAllNotes(){
