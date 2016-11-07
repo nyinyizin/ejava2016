@@ -6544,6 +6544,10 @@ button.close {
 .affix {
   position: fixed;
 }
+.selectWidth {
+	width: auto;
+  	margin:10px;
+}
 @-ms-viewport {
   width: device-width;
 }

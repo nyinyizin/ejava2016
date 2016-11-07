@@ -11,6 +11,7 @@ import ca2.ejava.model.Category;
 import ca2.ejava.model.Note;
 import ca2.ejava.model.User;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -61,19 +62,19 @@ public class MenuView {
         note.setCategory(category);
         note.setContent(content);
         note.setTitle(title);
-        Date date = new java.sql.Date(System.currentTimeMillis());
+        java.util.Date today = new java.util.Date();
+        Timestamp date = new java.sql.Timestamp(today.getTime());
         note.setPostDate(date);
         menuBean.save(note);
         notelist = menuBean.getAllNoteByUser(userId);
         
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage successful = new FacesMessage("note created successfully!");
+        FacesMessage successful = new FacesMessage("Note created successfully!");
         context.addMessage("menuForm=errorCreate", successful);
         return null;
     }
     
     public void findAllNotes(){
-        System.out.print("getting all notes by userId:"+userId);
         notelist = menuBean.getAllNoteByUser(userId);
     }
     

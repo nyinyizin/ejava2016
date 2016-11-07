@@ -23,7 +23,7 @@ public class MenuBean {
     
     public List<Note> getAllNoteByUser(String userId){
         TypedQuery<Note> query = em.createQuery(
-				"select n from Note n", 
+				"select n from Note n order by n.postDate desc", 
 				Note.class);
 		return (query.getResultList());
     }

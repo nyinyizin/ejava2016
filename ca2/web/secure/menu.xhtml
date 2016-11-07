@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
  <script src="/ca2/faces/assets/js/bootstrap.min.js"></script>
  <script src="/ca2/faces/assets/js/bootstrap.js"></script>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -25,27 +26,41 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="title"> Title: </label>
             <div class="col-sm-2">
-                <h:inputText size="128" required="true" 
+                <h:inputText size="100" required="true" 
                             requiredMessage="Please provide a title." 
                             value="#{menuView.title}">
                 <f:validateLength minimum="1" maximum="128"/>
                 </h:inputText>
             </div>
         </div>
-        <br></br>
-        Category: <h:selectOneMenu value="#{menuView.category}">
-            <f:selectItems value="#{menuView.categories}" var="cat" itemValue="#{cat}" itemLabel="#{cat.desc}"></f:selectItems>
-        </h:selectOneMenu>
-        <br></br>
-        content: <h:inputTextarea required="true" 
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="categorySel"> Category: </label>
+            <div class="col-sm-2">
+                <h:selectOneMenu value="#{menuView.category}" class="form-control selectWidth" id="categorySel" >
+                    <f:selectItems value="#{menuView.categories}" var="cat" itemValue="#{cat}" itemLabel="#{cat.desc}"></f:selectItems>
+                </h:selectOneMenu>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="content"> Content: </label>
+            <div class="col-sm-5">
+                <h:inputTextarea required="true" 
                                   requiredMessage="Please provide a title." 
-                                  value="#{menuView.content}">
-            <f:validateLength minimum="1" maximum="1000"/>
-            </h:inputTextarea>
-        <br></br>
-        <h:commandButton value="Create" action="#{menuView.createNote()}"/>
-        <h:message for="errorCreate"></h:message>
-	<br></br>
+                                  value="#{menuView.content}" 
+                                  class="form-control" rows="5">
+                    <f:validateLength minimum="1" maximum="1000"/>
+                </h:inputTextarea>
+            </div>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="btn"> 
+        <h:commandButton value="Create" class="btn btn-default" action="#{menuView.createNote()}"/>
+        </div>
+         <h:body>
+            <h:message for="errorCreate" class="alert alert-info col-sm-2"></h:message>
+        </h:body>
         <br></br>
         <div class="container">
             <h3>Your Notes!</h3>
