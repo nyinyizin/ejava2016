@@ -6,3 +6,6 @@
 /ca2/nbproject/private/
 /ca2/build/
 /ca2/dist/
+ca1/nbproject/ant-deploy.xml
+ca2/web/WEB-INF/web.xml
+ca2/web/index.xhtml

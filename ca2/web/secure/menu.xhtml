@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+ <script src="/ca2/faces/assets/js/bootstrap.min.js"></script>
+ <script src="/ca2/faces/assets/js/bootstrap.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <link rel="stylesheet" href="/ca2/faces/assets/css/bootstrap.min.css"></link>
+    <h:head>
+        <title>User Menu</title>
+    </h:head>
+    <div class="container">
+        <h1>Welcome to your Note Menu</h1>
+    </div>
+    <br></br>
+    <br></br>
+    <h:form id="menuForm" class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="user"> User: </label>
+            <div class="col-sm-2">
+                <h:outputText value="#{menuView.userId}" class="form-control"> </h:outputText>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="title"> Title: </label>
+            <div class="col-sm-2">
+                <h:inputText size="128" required="true" 
+                            requiredMessage="Please provide a title." 
+                            value="#{menuView.title}">
+                <f:validateLength minimum="1" maximum="128"/>
+                </h:inputText>
+            </div>
+        </div>
+        <br></br>
+        Category: <h:selectOneMenu value="#{menuView.category}">
+            <f:selectItems value="#{menuView.categories}" var="cat" itemValue="#{cat}" itemLabel="#{cat.desc}"></f:selectItems>
+        </h:selectOneMenu>
+        <br></br>
+        content: <h:inputTextarea required="true" 
+                                  requiredMessage="Please provide a title." 
+                                  value="#{menuView.content}">
+            <f:validateLength minimum="1" maximum="1000"/>
+            </h:inputTextarea>
+        <br></br>
+        <h:commandButton value="Create" action="#{menuView.createNote()}"/>
+        <h:message for="errorCreate"></h:message>
+	<br></br>
+        <br></br>
+        <div class="container">
+            <h3>Your Notes!</h3>
+        <h:dataTable var="n" class="table table-striped" value="#{menuView.notelist}" border="1">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                #{n.noteId}
+                </h:column>
+            <h:column>
+                    <f:facet name="header">User</f:facet>
+		    #{n.user.userId}
+                </h:column>
+            <h:column>
+                    <f:facet name="header">Title</f:facet>
+			#{n.title}
+                </h:column>
+            <h:column>
+                    <f:facet name="header">Category</f:facet>
+			#{n.category.desc}
+                </h:column>
+            <h:column>
+                
+                    <f:facet name="header">Content</f:facet>
+			#{n.content}
+                </h:column>
+            <h:column>
+                    <f:facet name="header">Date</f:facet>
+			#{n.postDate}
+                </h:column>
+        </h:dataTable>
+        </div>
+    </h:form>
+</html>
+
