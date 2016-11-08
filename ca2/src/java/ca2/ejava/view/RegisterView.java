@@ -5,8 +5,10 @@
  */
 package ca2.ejava.view;
 
-
+import ca2.ejava.business.GroupBean;
 import ca2.ejava.business.UserBean;
+import ca2.ejava.model.GroupPK;
+import ca2.ejava.model.Groups;
 import ca2.ejava.model.User;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -15,16 +17,17 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 
-    
-    
 @RequestScoped
 @Named("registerView")
 public class RegisterView {
 
-    @EJB private UserBean userBean;
-    
+    @EJB
+    private UserBean userBean;
+    private GroupBean groupBean;
+
     private String username;
     private String password;
+    private String rePassword;
 
     public String getUsername() {
         return username;
@@ -32,6 +35,14 @@ public class RegisterView {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getRePassword() {
+        return rePassword;
+    }
+
+    public void setRePassword(String rePassword) {
+        this.rePassword = rePassword;
     }
 
     public String getPassword() {
@@ -44,18 +55,35 @@ public class RegisterView {
 
     public String registerUser() {
 
-        User newUser = new User();
-        newUser.setUserId(username);
-        newUser.setPassword(password);
-        
-        try {
-            userBean.save(newUser);
-        } catch (PersistenceException ex) {
-            FacesMessage msg = new FacesMessage("Registration failed");
+        if (!password.equals(rePassword)) {
+            
+            FacesMessage msg = new FacesMessage("Passwors not matching!");
             FacesContext.getCurrentInstance().addMessage(null, msg);
             return ("/faces/register.xhtml");
-        }
+            
+        } else {
 
-        return ("/faces/login.xhtml");
+            User newUser = new User();
+            newUser.setUserId(username);
+            newUser.setPassword(password);
+            
+            Groups newGroup = new Groups();
+            GroupPK newPK = new GroupPK();
+            newPK.setGroupId("authenticated");
+            newPK.setUserId(username);
+            newGroup.setGroupPk(newPK);
+            
+
+            try {
+                userBean.save(newUser);
+                groupBean.save(newGroup);
+            } catch (PersistenceException ex) {
+                FacesMessage msg = new FacesMessage("Registration failed");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                return ("/faces/register.xhtml");
+            }
+
+            return ("/faces/login.xhtml");
+        }
     }
 }
