@@ -11,6 +11,9 @@ import ca2.ejava.model.GroupPK;
 import ca2.ejava.model.Groups;
 import ca2.ejava.model.User;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -23,6 +26,7 @@ public class RegisterView {
 
     @EJB
     private UserBean userBean;
+    @EJB
     private GroupBean groupBean;
 
     private String username;
@@ -78,6 +82,10 @@ public class RegisterView {
                 userBean.save(newUser);
                 groupBean.save(newGroup);
             } catch (PersistenceException ex) {
+                FacesMessage msg = new FacesMessage("Registration failed");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+                return ("/faces/register.xhtml");
+            } catch (EJBException e){
                 FacesMessage msg = new FacesMessage("Registration failed");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
                 return ("/faces/register.xhtml");
