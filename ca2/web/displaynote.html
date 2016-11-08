@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Note Display</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="/ca2/faces/assets/css/bootstrap.min.css"/>
+        <script src="/ca2/faces/assets/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="/ca2/faces/assets/js/bootstrap.js"></script>
+       
+        
+        <script type="text/javascript">
+              var socketUri="ws://localhost:8080/ca2/notesocket/all";
+              $(document).ready(function(){
+                  websocket=new WebSocket(socketUri);
+                  websocket.onopen=function(evt){
+                      onOpen(evt);
+                  };
+                  websocket.onmessage=function(evt){
+                      onMessage(evt);
+                  };
+                  websocket.onmessage=function(evt){
+                      onError(evt);
+                  };
+                  $(".nav-tabs a").click(function(){
+                     $(this).tab('show'); 
+                  });
+              });
+              
+              function onOpen(evt){
+                  doSend("hello");
+              }
+              function onMessage(evt){
+                  console.log(evt.data);
+              }
+              function onError(evt){
+                  console.log(evt.data);
+              }
+              function doSend(message){
+                  websocket.send(message);
+              }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Note Display</h2>
+            <br/>
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="active"><a data-toggle="tab" href="#all">All Note</a></li>
+              <li><a data-toggle="tab" href="#social">Social</a></li>
+              <li><a data-toggle="tab" href="#for-sale">For Sale</a></li>
+              <li><a data-toggle="tab" href="#jobs">Jobs</a></li>
+              <li><a data-toggle="tab" href="#tuition">Tuition</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="all" class="tab-pane fade in active">
+                    <h3>All Note</h3>
+                </div>
+                <div id="social" class="tab-pane fade">
+                    <h3>Social</h3>
+                </div>
+                <div id="for-sale" class="tab-pane fade">
+                    <h3>For Sale</h3>
+                </div>
+                <div id="jobs" class="tab-pane fade">
+                    <h3>Jobs</h3>
+                </div>
+                <div id="tuition" class="tab-pane fade">
+                    <h3>Tuition</h3>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
