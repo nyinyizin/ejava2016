@@ -54,8 +54,7 @@ public class Note implements Serializable{
         private Date postDate;
         
         @NotNull
-        @ManyToOne
-        @JoinColumn( name = "userid", referencedColumnName = "userid")
+        @ManyToOne @JoinColumn(name="userid", referencedColumnName="userid")
         private User user;
         
 

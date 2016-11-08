@@ -34,13 +34,8 @@ public class User implements Serializable {
     @Basic(optional = false)
     private String password;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     private ArrayList<Note> notelist;
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "userid", referencedColumnName = "userid")
-    private Groups groups;
 
     public String getUserId() {
         return userId;
@@ -58,19 +53,18 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Groups getGroups() {
-        return groups;
-    }
-
-    public void setGroups(Groups groups) {
-        this.groups = groups;
-    }
-
     /**
      * @return the notelist
      */
     public ArrayList<Note> getNotelist() {
         return notelist;
+    }
+
+    /**
+     * @param notelist the notelist to set
+     */
+    public void setNotelist(ArrayList<Note> notelist) {
+        this.notelist = notelist;
     }
 
 }

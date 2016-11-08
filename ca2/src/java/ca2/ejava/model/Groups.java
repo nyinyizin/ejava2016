@@ -21,19 +21,12 @@ public class Groups implements Serializable {
     @EmbeddedId
     private GroupPK groupPk;
 
-    @OneToMany(mappedBy = "groups")
-    private ArrayList<User> userlist;
-
     public GroupPK getGroupPk() {
         return groupPk;
     }
 
     public void setGroupPk(GroupPK groupPk) {
         this.groupPk = groupPk;
-    }
-
-    public ArrayList<User> getUserlist() {
-        return userlist;
     }
 
 }
