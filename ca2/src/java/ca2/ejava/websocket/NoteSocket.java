@@ -47,57 +47,8 @@ public class NoteSocket {
         System.out.println("Client connected"+ session.getId()+"   "+category);
            notesession.lock(()->{
                notesession.add(category, session);
-           });
-        
+           });  
       
-      
-    }
-    
-    public List<Note> loadExistingNotes(String category){
- 
-        if(category.equalsIgnoreCase("ALL")){
-            return noteBean.getAllNote();
-        }else{
-            return noteBean.getNoteByCategory(category);
-        }
-        
-        
-    }
-    public void broadcastExistingNote(String category){
-        List<Note> noteList=loadExistingNotes(category);
-        if(!noteList.isEmpty()){
-            JsonArrayBuilder jsonBuilder=Json.createArrayBuilder();
-             noteList.stream().forEach((note) -> {
-                            jsonBuilder.add(Json.createObjectBuilder()
-                                .add("title",note.getTitle())
-                                .add("dateTime", note.getPostDate().getTime())
-                                .add("user", note.getUser().getUserId())
-                                .add("category", note.getCategory().getDesc())
-                                .add("content", note.getContent())
-                                .build()
-                        );
-            });
-             
-            categories.get(category).stream().forEach(s->{
-            try{
-                s.getBasicRemote().sendText(jsonBuilder.build().toString());
-            }catch(IOException ex){
-                System.out.println(" error in broadcast ");
-            }
-        }); 
-             
-        }
-    }
-    public void broadcast(String category, String note){
-
-        categories.get(category).stream().forEach(s->{
-            try{
-                 System.out.println("in the broadcast "+note+" "+s.getId());
-                s.getBasicRemote().sendText(note);
-            }catch(IOException ex){
-                System.out.println(" error in broadcast ");
-            }
-        });
     }
     
     @OnClose

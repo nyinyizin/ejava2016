@@ -23,14 +23,14 @@ public class NoteBean {
     @PersistenceContext private EntityManager em;
     
     public List<Note> getAllNote(){
-        TypedQuery<Note> query=em.createQuery("select n from Note n order by n.postDate desc", Note.class);
+        TypedQuery<Note> query=em.createQuery("select n from Note n order by n.postDate asc", Note.class);
         return (query.getResultList());
     }
     
     public List<Note> getNoteByCategory(String category){
         System.out.println(category);
         
-        TypedQuery<Note> query=em.createQuery("select n from Note n where n.category=:category order by n.postDate desc",Note.class);
+        TypedQuery<Note> query=em.createQuery("select n from Note n where n.category=:category order by n.postDate asc",Note.class);
         if(category.equals("SOCIAL")){
                 query.setParameter("category", Category.SOCIAL);
         }else if(category.equals("JOBS")){
