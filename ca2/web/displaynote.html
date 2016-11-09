@@ -21,7 +21,7 @@ and open the template in the editor.
                   var socketUri="ws://localhost:8080/ca2/notesocket/ALL";
                   websocket=new WebSocket(socketUri);
                   websocket.onopen=function(evt){
-                      onOpen(evt);
+                      onOpen(evt,"ALL");
                   };
                   websocket.onmessage=function(evt){
                       onMessage(evt,"ALL");
@@ -37,7 +37,7 @@ and open the template in the editor.
                     var socketUri="ws://localhost:8080/ca2/notesocket/"+$(this).data("category");
                     websocket=new WebSocket(socketUri);
                     websocket.onopen=function(evt){
-                        onOpen(evt);
+                        onOpen(evt,currentCategory);
                     };
                     websocket.onmessage=function(evt){
                         console.log(currentCategory);
@@ -49,8 +49,30 @@ and open the template in the editor.
                   });
               });
               
-              function onOpen(evt){
-                  //doSend("hello");
+              function onOpen(evt,category){
+                 $.ajax({
+                     url:'http://localhost:8080/ca2/api/note/'+category,
+                     data:{
+                         format:'json'
+                     },
+                     error:function(){
+                         console.log("error");
+                     },
+                     success:function(data){
+                         if(data){
+                            for(var i=0;i<data.length;i++){
+                                var note=data[i];
+                                if($($("table[data-category='"+category+"'] tbody tr")[0]).length){
+                                    $($("table[data-category='"+category+"'] tbody")[0])
+                                        .prepend("<tr><td>"+note.title+"</td>"+"<td>"+timeConverter(note.dateTime)+"</td>"+"<td>"+note.user+"</td>"+"<td>"+note.category+"</td>"+"<td>"+note.content+"</td>"+"</td>");
+                                }else{
+                                    $($("table[data-category='"+category+"'] tbody")[0])
+                                        .append("<tr><td>"+note.title+"</td>"+"<td>"+timeConverter(note.dateTime)+"</td>"+"<td>"+note.user+"</td>"+"<td>"+note.category+"</td>"+"<td>"+note.content+"</td>"+"</td>");
+                                }
+                            } 
+                         }
+                     }
+                 });
               }
               function onMessage(evt,category){
                 console.log($("table[data-category='"+category+"']")[0]);
