@@ -5,6 +5,7 @@
  */
 package ca2.ejava.business;
 
+import ca2.ejava.model.Category;
 import ca2.ejava.model.Note;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -22,12 +23,24 @@ public class NoteBean {
     @PersistenceContext private EntityManager em;
     
     public List<Note> getAllNote(){
-        TypedQuery<Note> query=em.createQuery("select n from Note n", Note.class);
+        TypedQuery<Note> query=em.createQuery("select n from Note n order by n.postDate desc", Note.class);
         return (query.getResultList());
     }
     
     public List<Note> getNoteByCategory(String category){
-        TypedQuery<Note> query=em.createQuery("select n from Note n where n.category=:category",Note.class);
-        return query.setParameter("category", category).getResultList();
+        System.out.println(category);
+        
+        TypedQuery<Note> query=em.createQuery("select n from Note n where n.category=:category order by n.postDate desc",Note.class);
+        if(category.equals("SOCIAL")){
+                query.setParameter("category", Category.SOCIAL);
+        }else if(category.equals("JOBS")){
+             query.setParameter("category", Category.JOBS);
+        }else if(category.equals("FORSALE")){
+             query.setParameter("category", Category.FORSALE);
+        }else{
+            query.setParameter("category", Category.TUITUION);
+        }
+    
+        return query.getResultList();
     }
 }
