@@ -11,6 +11,7 @@ import ca2.ejava.model.Category;
 import ca2.ejava.model.Note;
 import ca2.ejava.model.User;
 import ca2.ejava.websocket.NoteClient;
+import ca2.ejava.websocket.NoteSession;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Date;
@@ -90,10 +91,10 @@ public class MenuView {
         final WebSocketContainer webSocketContainer = ContainerProvider.getWebSocketContainer();
         Session session=webSocketContainer.connectToServer(NoteClient.class, URI.create("ws://localhost:8080/ca2/notesocket/"+category));
         session.getBasicRemote().sendText(jsonNote);
-        session=webSocketContainer.connectToServer(NoteClient.class, URI.create("ws://localhost:8080/ca2/notesocket/all"));
+        session.close();
+        session=webSocketContainer.connectToServer(NoteClient.class, URI.create("ws://localhost:8080/ca2/notesocket/ALL"));
         session.getBasicRemote().sendText(jsonNote);
-        
-        
+        session.close();
         return null;
     }
     

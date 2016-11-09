@@ -90,7 +90,6 @@ public class NoteSocket {
     }
     public void broadcast(String category, String note){
 
-   
         categories.get(category).stream().forEach(s->{
             try{
                  System.out.println("in the broadcast "+note+" "+s.getId());
@@ -103,7 +102,9 @@ public class NoteSocket {
     
     @OnClose
     public void onClose(Session session, @PathParam("category") String category){
-        categories.get(category).remove(session);
+        notesession.lock(()->{
+          notesession.remove(category, session);
+      });
     }
 
     @OnError

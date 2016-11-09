@@ -43,6 +43,7 @@ public class NoteSession {
      
      public void remove(String category, Session session){
          categories.get(category).remove(session);
+          System.out.println("---- removed ----");
      }
     public void lock(Runnable block){
         lock.lock();

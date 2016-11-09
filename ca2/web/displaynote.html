@@ -10,34 +10,60 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link type="text/css" rel="stylesheet" href="/ca2/faces/assets/css/bootstrap.min.css"/>
-        <script src="/ca2/faces/assets/js/bootstrap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="/ca2/faces/assets/js/bootstrap.min.js"></script>
         <script src="/ca2/faces/assets/js/bootstrap.js"></script>
        
         
         <script type="text/javascript">
-              var socketUri="ws://localhost:8080/ca2/notesocket/all";
+              
               $(document).ready(function(){
+                  var socketUri="ws://localhost:8080/ca2/notesocket/ALL";
                   websocket=new WebSocket(socketUri);
                   websocket.onopen=function(evt){
                       onOpen(evt);
                   };
                   websocket.onmessage=function(evt){
-                      onMessage(evt);
+                      onMessage(evt,"ALL");
                   };
-                  websocket.onmessage=function(evt){
-                      onError(evt);
-                  };
+//                  websocket.onmessage=function(evt){
+//                      onError(evt);
+//                  };
                   $(".nav-tabs a").click(function(){
-                     $(this).tab('show'); 
+                    $(this).tab('show'); 
+                    console.log($(this).data("category"));
+                    websocket.close();
+                    var currentCategory=$(this).data("category");
+                    var socketUri="ws://localhost:8080/ca2/notesocket/"+$(this).data("category");
+                    websocket=new WebSocket(socketUri);
+                    websocket.onopen=function(evt){
+                        onOpen(evt);
+                    };
+                    websocket.onmessage=function(evt){
+                        console.log(currentCategory);
+                        onMessage(evt,currentCategory);
+                    };
+//                    websocket.onmessage=function(evt){
+//                        onError(evt);
+//                    };
                   });
               });
               
               function onOpen(evt){
                   //doSend("hello");
               }
-              function onMessage(evt){
-                  console.log(evt.data);
+              function onMessage(evt,category){
+                console.log($("table[data-category='"+category+"']")[0]);
+                console.log(evt.data);
+                var note=$.parseJSON(evt.data);
+                if($($("table[data-category='"+category+"'] tbody tr")[0]).length){
+                    $($("table[data-category='"+category+"'] tbody")[0])
+                            .prepend("<tr><td>"+note.title+"</td>"+"<td>"+timeConverter(note.dateTime)+"</td>"+"<td>"+note.user+"</td>"+"<td>"+note.category+"</td>"+"<td>"+note.content+"</td>"+"</td>");
+                }else{
+                    $($("table[data-category='"+category+"'] tbody")[0])
+                            .append("<tr><td>"+note.title+"</td>"+"<td>"+timeConverter(note.dateTime)+"</td>"+"<td>"+note.user+"</td>"+"<td>"+note.category+"</td>"+"<td>"+note.content+"</td>"+"</td>");
+                }
+                
               }
               function onError(evt){
                   console.log(evt.data);
@@ -45,6 +71,20 @@ and open the template in the editor.
               function doSend(message){
                   websocket.send(message);
               }
+              
+              
+
+            function timeConverter(UNIX_timestamp){
+              var a = new Date(UNIX_timestamp);
+              var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+              var year = a.getFullYear();
+              var date = a.getDate();
+              var hour = a.getHours();
+              var min = a.getMinutes();
+              var sec = a.getSeconds();
+              var time = year + '-' + (parseInt(a.getMonth())+1) + '-' + date + ' ' + hour + ':' + min + ':' + sec ;
+              return time;
+            }
         </script>
     </head>
     <body>
@@ -52,27 +92,97 @@ and open the template in the editor.
             <h2>Note Display</h2>
             <br/>
             <ul class="nav nav-tabs" role="tablist">
-              <li class="active"><a data-toggle="tab" href="#all">All Note</a></li>
-              <li><a data-toggle="tab" href="#social">Social</a></li>
-              <li><a data-toggle="tab" href="#for-sale">For Sale</a></li>
-              <li><a data-toggle="tab" href="#jobs">Jobs</a></li>
-              <li><a data-toggle="tab" href="#tuition">Tuition</a></li>
+              <li class="active"><a data-toggle="tab" href="#all" data-category="ALL">All Note</a></li>
+              <li><a data-toggle="tab" href="#social" data-category="SOCIAL">Social</a></li>
+              <li><a data-toggle="tab" href="#for-sale" data-category="FORSALE">For Sale</a></li>
+              <li><a data-toggle="tab" href="#jobs" data-category="JOBS">Jobs</a></li>
+              <li><a data-toggle="tab" href="#tuition" data-category="TUITION">Tuition</a></li>
             </ul>
             <div class="tab-content">
                 <div id="all" class="tab-pane fade in active">
                     <h3>All Note</h3>
+                    <table class="table" data-category="ALL">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
                 </div>
                 <div id="social" class="tab-pane fade">
                     <h3>Social</h3>
+                         <table class="table" data-category="SOCIAL">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
                 </div>
                 <div id="for-sale" class="tab-pane fade">
                     <h3>For Sale</h3>
+                         <table class="table" data-category="FORSALE">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
                 </div>
                 <div id="jobs" class="tab-pane fade">
                     <h3>Jobs</h3>
+                         <table class="table" data-category="JOBS">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
                 </div>
                 <div id="tuition" class="tab-pane fade">
                     <h3>Tuition</h3>
+                         <table class="table" data-category="TUITION">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
