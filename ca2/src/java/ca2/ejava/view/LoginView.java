@@ -53,6 +53,6 @@ public class LoginView implements Serializable {
             return ("/faces/login.xhtml");
         }
 
-        return ("/faces/secure/menu.xhtml?id="+username);
+        return ("/faces/secure/menu.xhtml?userId="+username);
     }
 }

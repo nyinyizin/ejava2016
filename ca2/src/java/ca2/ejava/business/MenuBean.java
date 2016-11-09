@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import ca2.ejava.model.User;
 /**
  *
  * @author XYZzzzz
@@ -25,6 +25,13 @@ public class MenuBean {
         TypedQuery<Note> query = em.createQuery(
 				"select n from Note n order by n.postDate desc", 
 				Note.class);
+		return (query.getResultList());
+    }
+    
+    public List<Note> getNotesByUser(String userId){
+        TypedQuery<Note> query = em.createNamedQuery(
+                "note.findNoteByUserId", Note.class);
+                query.setParameter("userId", userId);
 		return (query.getResultList());
     }
     

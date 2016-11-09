@@ -10,11 +10,7 @@ import ca2.ejava.business.UserBean;
 import ca2.ejava.model.Category;
 import ca2.ejava.model.Note;
 import ca2.ejava.model.User;
-import ca2.ejava.websocket.NoteClient;
-import ca2.ejava.websocket.NoteSession;
 import java.io.IOException;
-import java.net.URI;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,11 +21,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.json.Json;
-import javax.websocket.ContainerProvider;
-import javax.websocket.DeploymentException;
-import javax.websocket.Session;
-import javax.websocket.WebSocketContainer;
 
 /**
  *
@@ -42,23 +33,23 @@ public class MenuView {
     @EJB private MenuBean menuBean;
     @EJB private UserBean userBean;
     
-    private String userId="xykek";
+    private String userId;
     private String title;
     private String content;
     private Category category;
     private Note note;
     private List<Note> notelist = new LinkedList<>();
     
-    @PostConstruct
     public void init(){
-        this.findAllNotes();
+        System.out.println("userId ="+userId);
+        notelist = menuBean.getNotesByUser(userId);
     }
     
     public Category[] getCategories(){
         return Category.values();
     }
     
-    public String createNote() throws DeploymentException, IOException{
+    public String createNote(){
         Optional<User> user = userBean.find(userId);
         if(!user.isPresent()){
             FacesContext context = FacesContext.getCurrentInstance();
@@ -75,26 +66,11 @@ public class MenuView {
         Timestamp date = new java.sql.Timestamp(today.getTime());
         note.setPostDate(date);
         menuBean.save(note);
-        notelist = menuBean.getAllNoteByUser(userId);
+        notelist = menuBean.getNotesByUser(userId);
         
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage successful = new FacesMessage("Note created successfully!");
         context.addMessage("menuForm=errorCreate", successful);
-        
-        String jsonNote=Json.createObjectBuilder()
-				.add("title",note.getTitle())
-                                .add("dateTime", note.getPostDate().getTime())
-                                .add("user", note.getUser().getUserId())
-                                .add("category", note.getCategory().getDesc())
-                                .add("content", note.getContent()).build()
-				.toString();
-        final WebSocketContainer webSocketContainer = ContainerProvider.getWebSocketContainer();
-        Session session=webSocketContainer.connectToServer(NoteClient.class, URI.create("ws://localhost:8080/ca2/notesocket/"+category));
-        session.getBasicRemote().sendText(jsonNote);
-        session.close();
-        session=webSocketContainer.connectToServer(NoteClient.class, URI.create("ws://localhost:8080/ca2/notesocket/ALL"));
-        session.getBasicRemote().sendText(jsonNote);
-        session.close();
         return null;
     }
     
@@ -186,7 +162,5 @@ public class MenuView {
     public void setNote(Note note) {
         this.note = note;
     }
-    
-    
-    
+
 }

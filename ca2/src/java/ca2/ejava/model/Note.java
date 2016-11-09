@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,6 +26,9 @@ import javax.validation.constraints.NotNull;
  *
  * @author nyinyizin
  */
+@NamedQuery(name="note.findNoteByUserId",
+       query="Select n from Note n join n.user as u where u.userId=:userId order by n.postDate desc")
+
 @Table(name="note")
 @Entity
 public class Note implements Serializable{

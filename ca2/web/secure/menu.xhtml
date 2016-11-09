@@ -9,8 +9,9 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <link rel="stylesheet" href="/ca2/faces/assets/css/bootstrap.min.css"></link>
  <f:metadata>
-     <f:viewParam name="userid" value="#{menuView.userId}">
+     <f:viewParam name="userId" value="#{menuView.userId}">
      </f:viewParam>
+     <f:viewAction action="#{menuView.init()}" />
  </f:metadata>
     <h:head>
         <title>User Menu</title>
@@ -100,3 +101,4 @@
         </div>
     </h:form>
 </html>
+
