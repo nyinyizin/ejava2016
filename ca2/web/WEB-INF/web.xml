@@ -19,7 +19,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>displaynote.html</welcome-file>
     </welcome-file-list>
     <security-constraint>
         <display-name>Constraint1</display-name>
