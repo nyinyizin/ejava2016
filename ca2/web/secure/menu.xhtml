@@ -8,6 +8,10 @@
  <script src="/ca2/faces/assets/js/bootstrap.js"></script>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <link rel="stylesheet" href="/ca2/faces/assets/css/bootstrap.min.css"></link>
+ <f:metadata>
+     <f:viewParam name="userid" value="#{menuView.userId}">
+     </f:viewParam>
+ </f:metadata>
     <h:head>
         <title>User Menu</title>
     </h:head>
@@ -26,11 +30,12 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="title"> Title: </label>
             <div class="col-sm-2">
-                <h:inputText size="100" required="true" 
+                <h:inputText size="100" required="true" id="idTitle"
                             requiredMessage="Please provide a title." 
                             value="#{menuView.title}">
                 <f:validateLength minimum="1" maximum="128"/>
                 </h:inputText>
+                <h:message for="idTitle"></h:message>
             </div>
         </div>
         <div class="form-group">
@@ -44,12 +49,13 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="content"> Content: </label>
             <div class="col-sm-5">
-                <h:inputTextarea required="true" 
+                <h:inputTextarea required="true" id="idContent"
                                   requiredMessage="Please provide a title." 
                                   value="#{menuView.content}" 
                                   class="form-control" rows="5">
                     <f:validateLength minimum="1" maximum="1000"/>
                 </h:inputTextarea>
+                <h:message for="idContent"></h:message>
             </div>
         </div>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -59,7 +65,7 @@
         <h:commandButton value="Create" class="btn btn-default" action="#{menuView.createNote()}"/>
         </div>
          <h:body>
-            <h:message for="errorCreate" class="alert alert-info col-sm-2"></h:message>
+            <h:message id="errorCreate" for="errorCreate" class="alert alert-info col-sm-2"></h:message>
         </h:body>
         <br></br>
         <div class="container">
@@ -94,4 +100,3 @@
         </div>
     </h:form>
 </html>
-

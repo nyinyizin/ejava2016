@@ -5,16 +5,19 @@
  */
 package ca2.ejava.view;
 
-import javax.enterprise.context.RequestScoped;
+import java.io.Serializable;
 import javax.faces.application.FacesMessage;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-@RequestScoped
+@ViewScoped
 @Named("loginView")
-public class LoginView {
+public class LoginView implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private String username;
     private String password;
@@ -44,11 +47,12 @@ public class LoginView {
         try {
             req.login(username, password);
         } catch (ServletException ex) {
+            ex.printStackTrace();
             FacesMessage msg = new FacesMessage("Incorrect login");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            return ("/faces/index.xhtml");
+            return ("/faces/login.xhtml");
         }
 
-        return ("/secure/menu");
+        return ("/faces/secure/menu.xhtml?id="+username);
     }
 }
