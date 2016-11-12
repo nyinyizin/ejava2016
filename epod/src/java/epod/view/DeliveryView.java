@@ -5,6 +5,13 @@
  */
 package epod.view;
 
+import epod.business.DeliveryBean;
+import epod.business.PodBean;
+import epod.model.Delivery;
+import epod.model.Pod;
+import java.sql.Timestamp;
+import java.util.Date;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -16,6 +23,9 @@ import javax.inject.Named;
 @Named
 public class DeliveryView {
     // [TODO] Add EJB Pod and Delivery
+    
+    @EJB private DeliveryBean deliveryBean;
+    @EJB private PodBean podBean;
     
     private String name;
     private String address;
@@ -56,6 +66,17 @@ public class DeliveryView {
     public void createDelivery(){
         // [TODO] Save Delivery Entity
         // [TODO] Save Pod Entity
+        Delivery delivery=new Delivery();
+        delivery.setName(name);
+        delivery.setAddress(address);
+        delivery.setCreateDate(new Date());
+        
+        System.out.println(delivery.getAddress());
+        deliveryBean.save(delivery);
+//        
+//        Pod pod=new Pod();
+//        pod.setDelivery(delivery);
+//        podBean.save(pod);
     }
     
     
