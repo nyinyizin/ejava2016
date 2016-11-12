@@ -34,15 +34,15 @@ import javax.ws.rs.core.Response;
 @Stateless
 public class BatchJobSubmission implements Runnable{
     private static final Logger logger = Logger.getLogger(BatchJobSubmission.class.getName());
-    private Delivery delivery;
+    private Pod pod;
     
     @Override
     public void run() {
-        jobSubmission(getDelivery());
+        jobSubmission(this.getPod());
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void jobSubmission(Delivery delivery){
+    public void jobSubmission(Pod pod){
         Client client = ClientBuilder.newBuilder()
 				.register(MultiPartFeature.class)
 				.build();
@@ -55,12 +55,12 @@ public class BatchJobSubmission implements Runnable{
         imgPart.setContentDisposition(
 				FormDataContentDisposition.name("image")
 				.fileName("ca3.png").build());
-    
+        
         MultiPart formData = new FormDataMultiPart()
                                 .field("teamId",TeamID.TEAMID, MediaType.TEXT_PLAIN_TYPE)
-				.field("podId", "abc123", MediaType.TEXT_PLAIN_TYPE)
+				.field("podId", String.valueOf(pod.getPodId()), MediaType.TEXT_PLAIN_TYPE)
                                 .field("callback","http://10.10.12.53:8080/epod/callback", MediaType.TEXT_PLAIN_TYPE)
-				.field("note", "a message", MediaType.TEXT_PLAIN_TYPE)
+				.field("note",pod.getNote(), MediaType.TEXT_PLAIN_TYPE)
 				.bodyPart(imgPart);
         formData.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
         
@@ -71,17 +71,17 @@ public class BatchJobSubmission implements Runnable{
     } 
 
     /**
-     * @return the delivery
+     * @return the pod
      */
-    public Delivery getDelivery() {
-        return delivery;
+    public Pod getPod() {
+        return pod;
     }
 
     /**
-     * @param delivery the delivery to set
+     * @param pod the delivery to set
      */
-    public void setDelivery(Delivery delivery) {
-        this.delivery = delivery;
+    public void setPod(Pod pod) {
+        this.pod = pod;
     }
 
 

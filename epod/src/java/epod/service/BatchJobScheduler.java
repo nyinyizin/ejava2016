@@ -6,12 +6,13 @@
 package epod.service;
 
 import epod.business.DeliveryBean;
+import epod.business.PodBean;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
-import epod.model.Delivery;
+import epod.model.Pod;
 
 /**
  *
@@ -22,18 +23,18 @@ public class BatchJobScheduler {
     private static final Logger logger = Logger.getLogger(
                             BatchJobScheduler.class.getName());
     
-    @EJB private DeliveryBean deliveryBean; 
+    @EJB private PodBean podBean; 
     
     @Schedule(second="30")
     public void startBatchJob(){
         try{
-            ArrayList<Delivery> deliveryList = new ArrayList<Delivery>();
-            deliveryList.addAll(deliveryBean.getAllDelivery());
-            for(Delivery delivery:deliveryList){
+            ArrayList<Pod> podList = new ArrayList<Pod>();
+            podList.addAll(podBean.getAllNotAckedPod());
+            for(Pod pod:podList){
                 BatchJobSubmission batchJobSubmission = new BatchJobSubmission();
-                batchJobSubmission.setDelivery(delivery);
+                batchJobSubmission.setPod(pod);
                 batchJobSubmission.run();
-                //batchJobSubmission.jobSubmission(delivery);
+                //batchJobSubmission.jobSubmission(Pod);
             }
         }catch(Exception e){
             e.printStackTrace();
