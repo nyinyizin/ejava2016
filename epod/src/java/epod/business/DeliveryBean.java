@@ -6,10 +6,11 @@
 package epod.business;
 
 import epod.model.Delivery;
-import java.util.Optional;
+import java.util.*;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 @Stateless
 
@@ -22,7 +23,18 @@ public class DeliveryBean {
         em.persist(delivery);
     }
 
+    public void update(Delivery delivery) {
+        em.merge(delivery);
+    }
+
     public Optional<Delivery> find(String pkg_id) {
         return (Optional.ofNullable(em.find(Delivery.class, pkg_id)));
+    }
+
+    public List<Delivery> getAllDelivery() {
+        TypedQuery<Delivery> query = em.createQuery(
+                "select d from Delivery d order by d.create_date desc",
+                Delivery.class);
+        return (query.getResultList());
     }
 }
