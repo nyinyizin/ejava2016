@@ -13,28 +13,43 @@ import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import epod.model.Pod;
+import java.util.Properties;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.batch.operations.JobOperator;
+import javax.batch.runtime.BatchRuntime;
+import javax.ejb.LocalBean;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.ejb.Timeout;
+import javax.ejb.TimerService;
+import javax.ejb.Timer;
 
 /**
  *
  * @author XYZzzzz
  */
-@Stateless
+@Singleton
+@Startup
+@LocalBean
 public class BatchJobScheduler {
     private static final Logger logger = Logger.getLogger(
                             BatchJobScheduler.class.getName());
     
-    @EJB private PodBean podBean; 
+    @EJB private PodBean podBean;
+    @Resource
+    private TimerService timerService;
     
     @Schedule(second="30")
-    public void startBatchJob(){
+    public void execute(Timer timer){
         try{
             ArrayList<Pod> podList = new ArrayList<Pod>();
             podList.addAll(podBean.getAllNotAckedPod());
             for(Pod pod:podList){
                 BatchJobSubmission batchJobSubmission = new BatchJobSubmission();
-                batchJobSubmission.setPod(pod);
-                batchJobSubmission.run();
-                //batchJobSubmission.jobSubmission(Pod);
+                //batchJobSubmission.setPod(pod);
+                //batchJobSubmission.run();
+                batchJobSubmission.jobSubmission(pod);
             }
         }catch(Exception e){
             e.printStackTrace();
