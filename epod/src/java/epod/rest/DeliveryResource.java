@@ -43,6 +43,7 @@ public class DeliveryResource {
                                 //.add("podId", app.get)
                                 .add("name", app.getName())
                                 .add("address", app.getAddress())
+                                .add("phone", app.getPhone())
                                 .build()
                         );
                     });
