@@ -27,19 +27,19 @@ public class PodBean {
     }
 
     public Optional<Pod> find(String podId) {
-        return (Optional.ofNullable(em.find(Pod.class, podId)));
+        return (Optional.ofNullable(em.find(Pod.class,Integer.parseInt(podId))));
     }
 
     public List<Pod> getAllPod() {
         TypedQuery<Pod> query = em.createQuery(
-                "select p from Pod p order by p.delivery_date desc",
+                "select p from Pod p",
                 Pod.class);
         return (query.getResultList());
     }
 
     public List<Pod> getAllNotAckedPod() {
         TypedQuery<Pod> query = em.createQuery(
-                "select p from Pod p where (p.ack_id IS NULL) by p.delivery_date desc",
+                "select p from Pod p where (p.ack_id IS NULL)",
                 Pod.class);
         return (query.getResultList());
     }

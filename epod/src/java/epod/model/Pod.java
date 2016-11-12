@@ -45,7 +45,7 @@ public class Pod implements Serializable {
     @Column(name = "image")
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    private Blob image;
+    private byte[] image;
 
     @Column(name = "delivery_date")
     @Temporal(TemporalType.TIMESTAMP)
@@ -70,11 +70,11 @@ public class Pod implements Serializable {
         this.note = note;
     }
 
-    public Blob getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 

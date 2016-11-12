@@ -42,7 +42,7 @@ public class DeliveryBean {
 
     public List<Delivery> getAllDelivery() {
         TypedQuery<Delivery> query = em.createQuery(
-                "select d from Delivery d order by d.create_date desc",
+                "select d from Delivery d",
                 Delivery.class);
         return (query.getResultList());
     }

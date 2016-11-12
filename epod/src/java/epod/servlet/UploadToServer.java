@@ -5,9 +5,16 @@
  */
 package epod.servlet;
 
+import epod.business.PodBean;
+import epod.model.Pod;
+import epod.service.BatchJobScheduler;
+import epod.service.BatchJobSubmission;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.Optional;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -24,7 +31,9 @@ import org.jboss.logging.Logger;
 @WebServlet("/upload")
 @MultipartConfig
 public class UploadToServer extends HttpServlet{
-    
+    @EJB private PodBean podBean;
+    private BatchJobScheduler batchJobScheduler;
+    private BatchJobSubmission batchJobSubmission;
     private final static Logger LOGGER=Logger.getLogger(UploadToServer.class.getCanonicalName());
     
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException{
@@ -33,6 +42,20 @@ public class UploadToServer extends HttpServlet{
         String time=req.getParameter("time");
         Part imagePart=req.getPart("image");
         byte[] imageByte=imageToByte(imagePart);
+        System.out.println(imageByte);
+        
+        
+       Optional<Pod> p=podBean.find(podId);
+       if(p.isPresent()){
+           Pod pod=p.get();
+           pod.setNote(note);
+           pod.setImage(imageByte);
+           pod.setDeliveryDate(new Date());
+           podBean.update(pod);
+           batchJobScheduler=new BatchJobScheduler();
+           batchJobSubmission=new BatchJobSubmission();
+           batchJobSubmission.jobSubmission(pod);
+       }
         
         // [TODO] Save to entity
         // [TODO] Call CRON job to handle it

@@ -66,7 +66,7 @@ public class DeliveryView {
         this.dateOfDeliveryCreation = dateOfDeliveryCreation;
     }
     
-    public void createDelivery(){
+    public String createDelivery(){
         // [TODO] Save Delivery Entity
         // [TODO] Save Pod Entity
         Delivery delivery=new Delivery();
@@ -82,7 +82,7 @@ public class DeliveryView {
         Pod pod=new Pod();
         pod.setDelivery(delivery);
         podBean.save(pod);
-        return;
+        return ("/faces/index.xhtml");
     }
     
     

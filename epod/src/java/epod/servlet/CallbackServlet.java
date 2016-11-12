@@ -26,7 +26,7 @@ public class CallbackServlet extends HttpServlet {
      @EJB private PodBean podBean;
      
      protected void doGet(HttpServletRequest req, HttpServletResponse res){
-         String podID = req.getParameter("podID");
+         String podID = req.getParameter("podId");
          String ackID = req.getParameter("ackId");
          
          // [TODO] Save to pod entity
@@ -37,6 +37,8 @@ public class CallbackServlet extends HttpServlet {
              updatedPod.setAckId(ackID);
              podBean.update(updatedPod);
          }
+
+        System.out.println(podID);
          
      }
 }

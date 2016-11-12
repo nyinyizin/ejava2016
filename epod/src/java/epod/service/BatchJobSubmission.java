@@ -15,6 +15,10 @@ import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -38,19 +42,27 @@ public class BatchJobSubmission implements Runnable{
     
     @Override
     public void run() {
-        jobSubmission(this.getPod());
+        try {
+            jobSubmission(this.getPod());
+        } catch (IOException ex) {
+            Logger.getLogger(BatchJobSubmission.class.getName()).log(Level.SEVERE, null, ex);
+        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void jobSubmission(Pod pod){
+    public void jobSubmission(Pod pod) throws FileNotFoundException, IOException{
         Client client = ClientBuilder.newBuilder()
 				.register(MultiPartFeature.class)
 				.build();
 
         MultiPart part = new MultiPart();
-    
-        FileDataBodyPart imgPart = new FileDataBodyPart("image", 
-				new File("D:\\NUS\\EJava\\ca3.png"),
+        File file=new File("a.png");
+        FileOutputStream fileOuputStream =
+                  new FileOutputStream(file);
+	    fileOuputStream.write(pod.getImage());
+            fileOuputStream.flush();
+	    fileOuputStream.close();
+        FileDataBodyPart imgPart = new FileDataBodyPart("image", file,
 				MediaType.APPLICATION_OCTET_STREAM_TYPE);
         imgPart.setContentDisposition(
 				FormDataContentDisposition.name("image")
@@ -59,15 +71,15 @@ public class BatchJobSubmission implements Runnable{
         MultiPart formData = new FormDataMultiPart()
                                 .field("teamId",TeamID.TEAMID, MediaType.TEXT_PLAIN_TYPE)
 				.field("podId", String.valueOf(pod.getPodId()), MediaType.TEXT_PLAIN_TYPE)
-                                .field("callback","http://10.10.12.53:8080/epod/callback", MediaType.TEXT_PLAIN_TYPE)
+                                .field("callback","http://10.10.24.210:8080/epod/callback", MediaType.TEXT_PLAIN_TYPE)
 				.field("note",pod.getNote(), MediaType.TEXT_PLAIN_TYPE)
 				.bodyPart(imgPart);
         formData.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
         
-        WebTarget target = client.target("10.10.0.48:8080/epod/upload");
+        WebTarget target = client.target("http://10.10.0.48:8080/epod/upload");
 		      Invocation.Builder inv = target.request();
                       
-        Response callResp = inv.post(Entity.entity(inv, MediaType.WILDCARD_TYPE).entity(formData, formData.getMediaType()));           
+        Response callResp = inv.post(Entity.entity(formData, formData.getMediaType()));           
     } 
 
     /**

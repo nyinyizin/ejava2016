@@ -6,7 +6,9 @@
 package epod.rest;
 
 import epod.business.DeliveryBean;
+import epod.business.PodBean;
 import epod.model.Delivery;
+import epod.model.Pod;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -26,24 +28,24 @@ import javax.json.JsonArrayBuilder;
 @Path("/items")
 public class DeliveryResource {
    
-    @EJB DeliveryBean deliveryBean;
+    @EJB PodBean podBean;
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllDelivery(){
         // [TODO] Call Bean to get list and return json
         // Get TeamID from TeamID utils
         Response resp;
-         List<Delivery> deliveryList=deliveryBean.getAllDelivery();
+         List<Pod> deliveryList=podBean.getAllPod();
          System.out.println(deliveryList.size());
                 if(!deliveryList.isEmpty()){
                         JsonArrayBuilder deliveryJsonBuilder=Json.createArrayBuilder();
                         deliveryList.stream().forEach((app) -> {
                             deliveryJsonBuilder.add(Json.createObjectBuilder()
                                 .add("teamId",TeamID.TEAMID)
-                                //.add("podId", app.get)
-                                .add("name", app.getName())
-                                .add("address", app.getAddress())
-                                .add("phone", app.getPhone())
+                                .add("podId",app.getPodId() )
+                                .add("name", app.getDelivery().getName())
+                                .add("address", app.getDelivery().getAddress())
+                                .add("phone", app.getDelivery().getPhone())
                                 .build()
                         );
                     });
