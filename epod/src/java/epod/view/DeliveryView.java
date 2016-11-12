@@ -69,7 +69,9 @@ public class DeliveryView {
         Delivery delivery=new Delivery();
         delivery.setName(name);
         delivery.setAddress(address);
-        delivery.setCreateDate(new Date());
+        java.util.Date today = new java.util.Date();
+        Timestamp date = new java.sql.Timestamp(today.getTime());
+        delivery.setCreateDate(date);
         
         System.out.println(delivery.getAddress());
         deliveryBean.save(delivery);
