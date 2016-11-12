@@ -9,3 +9,7 @@
 ca1/nbproject/ant-deploy.xml
 ca2/web/WEB-INF/web.xml
 ca2/web/index.xhtml
+
+/epod/nbproject/private/
+/epod/build/
+/epod/dist/
