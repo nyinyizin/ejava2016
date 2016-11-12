@@ -78,12 +78,11 @@ public class DeliveryView {
         delivery.setCreateDate(date);
         System.out.println(delivery.getAddress());
         deliveryBean.save(delivery);
-        
 
-
-//        Pod pod=new Pod();
-//        pod.setDelivery(delivery);
-//        podBean.save(pod);
+        Pod pod=new Pod();
+        pod.setDelivery(delivery);
+        podBean.save(pod);
+        return;
     }
     
     
