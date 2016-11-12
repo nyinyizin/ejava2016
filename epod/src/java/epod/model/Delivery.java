@@ -6,26 +6,28 @@
 package epod.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name="delivery")
 public class Delivery implements Serializable {
 
     private static long serialVersionUID = 1L;
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = IDENTITY)
-    @OneToOne(mappedBy = "Delivery")
     @Column(name = "pkg_id")
-    private int pkgId;
+    private Integer pkgId;
 
     @NotNull
     @Column(name = "name")
@@ -41,15 +43,8 @@ public class Delivery implements Serializable {
 
     @Column(name = "create_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createDate;
-
-    public int getPkgId() {
-        return pkgId;
-    }
-
-    public void setPkgId(int pkgId) {
-        this.pkgId = pkgId;
-    }
+    private Date createDate;
+    
 
     public String getName() {
         return name;
@@ -75,12 +70,32 @@ public class Delivery implements Serializable {
         this.phone = phone;
     }
 
-    public Timestamp getCreateDate() {
+    /**
+     * @return the createDate
+     */
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    /**
+     * @param createDate the createDate to set
+     */
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    /**
+     * @return the pkgId
+     */
+    public Integer getPkgId() {
+        return pkgId;
+    }
+
+    /**
+     * @param pkgId the pkgId to set
+     */
+    public void setPkgId(Integer pkgId) {
+        this.pkgId = pkgId;
     }
 
 }

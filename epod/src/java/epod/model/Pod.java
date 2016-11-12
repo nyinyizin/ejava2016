@@ -7,9 +7,10 @@ package epod.model;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import java.sql.Timestamp;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -17,24 +18,26 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name="pod")
 public class Pod implements Serializable {
 
     private static long serialVersionUID = 1L;
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "pod_id")
     private int podId;
 
     @OneToOne
-    @JoinColumn(name = "pkg_id", referencedColumnName = "pkg_id")
+    @JoinColumn(name="pkg_id")
     @NotNull
-    private int pkgId;
+    private Delivery delivery;
 
     @Column(name = "note")
     private String note;
@@ -46,7 +49,7 @@ public class Pod implements Serializable {
 
     @Column(name = "delivery_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp deliveryDate;
+    private Date deliveryDate;
 
     @Column(name = "ack_id")
     private String ackId;
@@ -57,14 +60,6 @@ public class Pod implements Serializable {
 
     public void setPodId(int podId) {
         this.podId = podId;
-    }
-
-    public int getPkgId() {
-        return pkgId;
-    }
-
-    public void setPkgId(int pkgId) {
-        this.pkgId = pkgId;
     }
 
     public String getNote() {
@@ -83,14 +78,6 @@ public class Pod implements Serializable {
         this.image = image;
     }
 
-    public Timestamp getDeliveryDate() {
-        return deliveryDate;
-    }
-
-    public void setDeliveryDate(Timestamp deliveryDate) {
-        this.deliveryDate = deliveryDate;
-    }
-
     public String getAckId() {
         return ackId;
     }
@@ -98,4 +85,33 @@ public class Pod implements Serializable {
     public void setAckId(String ackId) {
         this.ackId = ackId;
     }
+
+    /**
+     * @return the deliveryDate
+     */
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    /**
+     * @param deliveryDate the deliveryDate to set
+     */
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    /**
+     * @return the delivery
+     */
+    public Delivery getDelivery() {
+        return delivery;
+    }
+
+    /**
+     * @param delivery the delivery to set
+     */
+    public void setDelivery(Delivery delivery) {
+        this.delivery = delivery;
+    }
+    
 }

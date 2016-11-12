@@ -11,16 +11,25 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 @Stateless
-
 public class DeliveryBean {
 
     @PersistenceContext
     private EntityManager em;
 
     public void save(Delivery delivery) {
-        em.persist(delivery);
+        try{
+            em.persist(delivery);
+        }catch (ConstraintViolationException e){
+             Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
+             String errMsg = "";
+              for (ConstraintViolation<?> cv : cvs) {    
+                    errMsg = cv.getMessage();
+                }
+        }
     }
 
     public void update(Delivery delivery) {

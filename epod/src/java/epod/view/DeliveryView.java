@@ -11,9 +11,12 @@ import epod.model.Delivery;
 import epod.model.Pod;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  *
@@ -69,11 +72,15 @@ public class DeliveryView {
         Delivery delivery=new Delivery();
         delivery.setName(name);
         delivery.setAddress(address);
-        delivery.setCreateDate(new Date());
-        
+        delivery.setPhone(phoneNumber);
+        java.util.Date today = new java.util.Date();
+        Timestamp date = new java.sql.Timestamp(today.getTime());
+        delivery.setCreateDate(date);
         System.out.println(delivery.getAddress());
         deliveryBean.save(delivery);
-//        
+        
+
+
 //        Pod pod=new Pod();
 //        pod.setDelivery(delivery);
 //        podBean.save(pod);
